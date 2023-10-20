@@ -81,12 +81,6 @@ func jwtMiddleware(privateKey *rsa.PrivateKey) fiber.Handler {
 			})
 
 			if err == nil {
-				exp, err := token.Claims.GetExpirationTime()
-				if err != nil || exp.Compare(time.Now()) == -1 {
-					// Token is expired
-					return c.Next()
-				}
-
 				sub, err := token.Claims.GetSubject()
 				if err != nil {
 					return c.Next()
@@ -138,7 +132,7 @@ func login(privateKey *rsa.PrivateKey) fiber.Handler {
 			})
 		}
 
-		expires := time.Now().Add(time.Hour * 1)
+		expires := time.Now().Add(time.Second)
 		claims := jwt.MapClaims{
 			"iss": "admin",
 			"sub": user.Username,
@@ -161,7 +155,7 @@ func login(privateKey *rsa.PrivateKey) fiber.Handler {
 		c.Cookie(&fiber.Cookie{
 			Name:    "jwt",
 			Value:   t,
-			Expires: expires,
+			Expires: expires.Add(time.Hour),
 		})
 
 		return c.Redirect("/")
