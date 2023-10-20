@@ -132,7 +132,7 @@ func login(privateKey *rsa.PrivateKey) fiber.Handler {
 			})
 		}
 
-		expires := time.Now().Add(time.Second)
+		expires := time.Now().Add(time.Hour)
 		claims := jwt.MapClaims{
 			"iss": "admin",
 			"sub": user.Username,
@@ -155,7 +155,7 @@ func login(privateKey *rsa.PrivateKey) fiber.Handler {
 		c.Cookie(&fiber.Cookie{
 			Name:    "jwt",
 			Value:   t,
-			Expires: expires.Add(time.Hour),
+			Expires: expires,
 		})
 
 		return c.Redirect("/")
