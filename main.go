@@ -81,10 +81,18 @@ func jwtMiddleware(privateKey *rsa.PrivateKey) fiber.Handler {
 			})
 
 			if err == nil {
-				claims := token.Claims.(jwt.MapClaims)
-				username := claims["sub"].(string)
+				exp, err := token.Claims.GetExpirationTime()
+				if err != nil || exp.Compare(time.Now()) == -1 {
+					// Token is expired
+					return c.Next()
+				}
 
-				c.Locals("username", username)
+				sub, err := token.Claims.GetSubject()
+				if err != nil {
+					return c.Next()
+				}
+
+				c.Locals("username", sub)
 			}
 		}
 
