@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Welcome, {{if .Username}} {{.Username}} {{- else }} Anonynous {{- end}}!</h3>
+                    </div>
+                    <div class="card-body">
+                        {{if .Username}}
+                        <p>You are now logged in to your account.</p>
+                        <a href="/logout" class="btn btn-primary">Logout</a>
+                        {{- else }}
+                        <p>You are not logged in to your account.</p>
+                        <a href="/login" class="btn btn-primary">Login</a>
+                        {{- end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
